@@ -1,28 +1,31 @@
 package tech.zerofiltre.testing.calcul.controller;
 
-import javax.inject.Inject;
-import javax.validation.Valid;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import tech.zerofiltre.testing.calcul.domain.model.Calculation;
 import tech.zerofiltre.testing.calcul.domain.model.CalculationModel;
 import tech.zerofiltre.testing.calcul.domain.model.CalculationType;
 import tech.zerofiltre.testing.calcul.service.CalculatorService;
+
+import javax.validation.Valid;
 
 @Controller
 public class CalculatorController {
 
 	public static final String CALCULATOR_TEMPLATE = "calculator";
 
-	@Inject
-	CalculatorService calculatorService;
+	private final CalculatorService calculatorService;
 
-	@GetMapping("/")
+	@Autowired
+	public CalculatorController(CalculatorService calculatorService) {
+        this.calculatorService = calculatorService;
+    }
+
+    @GetMapping("/")
 	public String index(Calculation calculation) {
 		return "redirect:/calculator";
 	}
