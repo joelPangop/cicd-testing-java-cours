@@ -8,8 +8,8 @@ def EMAIL_RECIPIENTS = "philippe.guemkamsimo@gmail.com"
 node {
     try {
         stage('Initialize') {
-            def dockerHome = tool 'DockerLatest'
-            def mavenHome = tool 'MavenLatest'
+            def dockerHome = tool 'dockerlatest'
+            def mavenHome = tool 'mavenlatest'
             env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
         }
 
@@ -43,13 +43,13 @@ node {
         }
 
         stage('Push to Docker Registry') {
-            withCredentials([usernamePassword(credentialsId: 'DockerhubCredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            withCredentials([usernamePassword(credentialsId: 'dockerhubcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
             }
         }
 
         stage('Run App') {
-            withCredentials([usernamePassword(credentialsId: 'DockerhubCredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            withCredentials([usernamePassword(credentialsId: 'dockerhubcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 runApp(CONTAINER_NAME, CONTAINER_TAG, USERNAME, HTTP_PORT, ENV_NAME)
 
             }
